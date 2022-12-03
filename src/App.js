@@ -30,8 +30,6 @@ function App() {
         const file = e.target.files[0];
         var fileType = file.name.substr(file.name.lastIndexOf("."));
         if (fileType.toLowerCase() !== '.png' && fileType.toLowerCase() !== '.jpeg' && fileType.toLowerCase() !== '.jpg') return alert('jpg, jpeg or png files only')
-        console.log(fileType)
-        console.log(file)
         setPreviewImage(file)
         setImageName(file.name)
         var kb = Number(file.size) / 1000
@@ -43,7 +41,7 @@ function App() {
 
         var formData = new FormData();
         formData.append("file", file)
-        await axios.post('http://192.168.0.133:8080/api/predict?model_name=Resnet50', formData, {
+        await axios.post('https://frozen-everglades-31935.herokuapp.com/api/predict?model_name=Resnet50', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
@@ -64,7 +62,6 @@ function App() {
                                 var date = new Date().toLocaleString()
                                 addDoc(CollectionRef, { image: url, timeStamp: date, respond: response.data })
                                     .then(() => {
-                                        console.log(response)
                                         setProccesed(true)
                                         setImageDescription(response.data)
                                         const reader = new FileReader();
@@ -76,7 +73,6 @@ function App() {
                                         }, 2000);
 
                                         setTimeout(() => {
-                                            console.log(reader.result)
                                             setPreviewImage(reader.result)
                                             setDisplayReults(true)
                                         }, 3000);
@@ -133,7 +129,7 @@ function App() {
                     </div>
                     <div className="image-description">
                         <label>{ImageName}</label>
-                        <label>{ImageSize} MB</label>
+                        <label>{ImageSize} KB</label>
                     </div>
                     <div className="image-cancel">
                         <label onClick={closeContent}>X</label>
